@@ -103,7 +103,7 @@ namespace ParTool
             // Path.GetFileName(), so they need to be combined with dirPath.
             // If the arguments were null, then using FileInfo/Directoryinfo and getting the FullName
             // will return a rooted path, which will then *not* get combined with dirPath.
-            if (files is null)
+            if (files is null || !files.Any())
             {
                 files = new List<string>(directoryInfo.GetFiles().Select(f => f.FullName));
             }
@@ -114,7 +114,7 @@ namespace ParTool
                 container.Add(fileNode);
             }
 
-            if (directories is null)
+            if (directories is null || !directories.Any())
             {
                 directories = new List<string>(directoryInfo.GetDirectories().Select(f => f.FullName));
             }
