@@ -113,5 +113,21 @@ namespace ParTool
 
             return container;
         }
+
+        /// <summary>
+        /// Semi-equivalent to Path.Join but for .NET standard 2.0
+        /// </summary>
+        /// <param name="path1"></param>
+        /// <param name="path2"></param>
+        /// <returns></returns>
+        private static string PathJoin(string path1, string path2)
+        {
+            if (path2.StartsWith(Path.DirectorySeparatorChar.ToString()))
+            {
+                path2 = path2.Substring(1);
+            }
+
+            return Path.Combine(path1, path2);
+        }
     }
 }

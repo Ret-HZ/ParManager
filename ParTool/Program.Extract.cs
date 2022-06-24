@@ -55,7 +55,7 @@ namespace ParTool
             foreach (Node node in Navigator.IterateNodes(parNode))
             {
                 string fileInfoPath = node.Path.Substring(parNode.Path.Length).Replace('/', Path.DirectorySeparatorChar);
-                string outputPath = Path.Join(outputFolder, fileInfoPath);
+                string outputPath = PathJoin(outputFolder, fileInfoPath);
 
                 var file = node.GetFormatAs<ParFile>();
 
