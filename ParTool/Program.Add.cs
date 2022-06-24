@@ -7,6 +7,7 @@ namespace ParTool
     using System.IO;
     using ParLibrary.Converter;
     using Yarhl.FileSystem;
+    using Yarhl.IO;
 
     /// <summary>
     /// Node adding functionality.
@@ -29,6 +30,15 @@ namespace ParTool
                 return;
             }
 
+            // Allows adding to the same par
+            // Copy the FileStream to a DataStream so we can close the existing par before overwriting it
+            DataStream stream = new DataStream();
+            using (FileStream file = File.OpenRead(opts.InputParArchivePath))
+            {
+                file.CopyTo(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+            }
+
             if (File.Exists(opts.OutputParArchivePath))
             {
                 Console.WriteLine("WARNING: Output file already exists. It will be overwritten.");
@@ -47,7 +57,7 @@ namespace ParTool
             };
 
             Console.Write("Reading PAR file... ");
-            Node par = NodeFactory.FromFile(opts.InputParArchivePath, Yarhl.IO.FileOpenMode.Read);
+            Node par = NodeFactory.FromSubstream(Path.GetFileName(opts.InputParArchivePath), stream, 0, stream.Length);
             par.TransformWith<ParArchiveReader, ParArchiveReaderParameters>(readerParameters);
             writerParameters.IncludeDots = par.Children[0].Name == ".";
             Console.WriteLine("DONE!");
