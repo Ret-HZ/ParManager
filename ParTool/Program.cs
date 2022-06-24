@@ -4,7 +4,9 @@
 namespace ParTool
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using CommandLine;
     using CommandLine.Text;
     using Yarhl.FileSystem;
@@ -84,7 +86,7 @@ namespace ParTool
             "Reliability",
             "CA2000:Dispose objects before losing scope",
             Justification = "Ownserhip dispose transferred")]
-        private static Node ReadDirectory(string dirPath, string nodeName = "")
+        private static Node ReadDirectory(string dirPath, string nodeName = "", IEnumerable<string> files = null, IEnumerable<string> directories = null)
         {
             dirPath = Path.GetFullPath(dirPath);
 
@@ -97,17 +99,25 @@ namespace ParTool
             var directoryInfo = new DirectoryInfo(dirPath);
             container.Tags["DirectoryInfo"] = directoryInfo;
 
-            var files = directoryInfo.GetFiles();
-            foreach (FileInfo file in files)
+            if (files is null)
             {
-                Node fileNode = Yarhl.FileSystem.NodeFactory.FromFile(file.FullName, Yarhl.IO.FileOpenMode.Read);
+                files = new List<string>(directoryInfo.GetFiles().Select(f => f.FullName));
+            }
+
+            foreach (string file in files)
+            {
+                Node fileNode = Yarhl.FileSystem.NodeFactory.FromFile(Path.GetFullPath(file), Yarhl.IO.FileOpenMode.Read);
                 container.Add(fileNode);
             }
 
-            var directories = directoryInfo.GetDirectories();
-            foreach (DirectoryInfo directory in directories)
+            if (directories is null)
             {
-                Node directoryNode = ReadDirectory(directory.FullName);
+                directories = new List<string>(directoryInfo.GetDirectories().Select(f => f.FullName));
+            }
+
+            foreach (string directory in directories)
+            {
+                Node directoryNode = ReadDirectory(Path.GetFullPath(directory));
                 container.Add(directoryNode);
             }
 

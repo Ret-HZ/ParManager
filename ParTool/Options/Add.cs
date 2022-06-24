@@ -3,6 +3,7 @@
 // -------------------------------------------------------
 namespace ParTool.Options
 {
+    using System.Collections.Generic;
     using CommandLine;
 
     /// <summary>
@@ -35,5 +36,17 @@ namespace ParTool.Options
         /// </summary>
         [Option('c', "compression", Default = 0x01, HelpText = "SLLZ algorithm.")]
         public int Compression { get; set; }
+
+        /// <summary>
+        /// Gets or sets the files to read from the input directory.
+        /// </summary>
+        [Option("files", Default = null, HelpText = "Files inside the root of the input directory to be processed.")]
+        public IEnumerable<string> InputFiles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the folders to read from the input directory.
+        /// </summary>
+        [Option("folders", Default = null, HelpText = "Folders inside the root of the input directory to be processed.")]
+        public IEnumerable<string> InputFolders { get; set; }
     }
 }
