@@ -28,13 +28,6 @@ namespace ParTool
             if (Directory.Exists(opts.OutputDirectory))
             {
                 Console.WriteLine("WARNING: Output directory already exists. Its contents may be overwritten.");
-                Console.Write("Continue? (y/N) ");
-                string answer = Console.ReadLine();
-                if (!string.IsNullOrEmpty(answer) && answer.ToUpperInvariant() != "Y")
-                {
-                    Console.WriteLine("CANCELLED BY USER.");
-                    return;
-                }
             }
 
             Directory.CreateDirectory(opts.OutputDirectory);

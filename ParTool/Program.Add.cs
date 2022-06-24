@@ -32,14 +32,6 @@ namespace ParTool
             if (File.Exists(opts.OutputParArchivePath))
             {
                 Console.WriteLine("WARNING: Output file already exists. It will be overwritten.");
-                Console.Write("Continue? (y/N) ");
-                string answer = Console.ReadLine();
-                if (!string.IsNullOrEmpty(answer) && answer.ToUpperInvariant() != "Y")
-                {
-                    Console.WriteLine("CANCELLED BY USER.");
-                    return;
-                }
-
                 File.Delete(opts.OutputParArchivePath);
             }
 
