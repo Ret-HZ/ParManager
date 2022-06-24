@@ -99,6 +99,10 @@ namespace ParTool
             var directoryInfo = new DirectoryInfo(dirPath);
             container.Tags["DirectoryInfo"] = directoryInfo;
 
+            // files and folders that were received as arguments contain names created with
+            // Path.GetFileName(), so they need to be combined with dirPath.
+            // If the arguments were null, then using FileInfo/Directoryinfo and getting the FullName
+            // will return a rooted path, which will then *not* get combined with dirPath.
             if (files is null)
             {
                 files = new List<string>(directoryInfo.GetFiles().Select(f => f.FullName));
@@ -106,7 +110,7 @@ namespace ParTool
 
             foreach (string file in files)
             {
-                Node fileNode = Yarhl.FileSystem.NodeFactory.FromFile(Path.GetFullPath(file), Yarhl.IO.FileOpenMode.Read);
+                Node fileNode = Yarhl.FileSystem.NodeFactory.FromFile(Path.Combine(dirPath, file), Yarhl.IO.FileOpenMode.Read);
                 container.Add(fileNode);
             }
 
@@ -117,7 +121,7 @@ namespace ParTool
 
             foreach (string directory in directories)
             {
-                Node directoryNode = ReadDirectory(Path.GetFullPath(directory));
+                Node directoryNode = ReadDirectory(Path.Combine(dirPath, directory));
                 container.Add(directoryNode);
             }
 
