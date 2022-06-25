@@ -107,7 +107,7 @@ namespace ParTool
             {
                 files = new List<string>(directoryInfo.GetFiles().Select(f => f.FullName));
             }
-            else if (files.SingleOrDefault().Length == 0)
+            else if (files.First().Length == 0)
             {
                 files = Enumerable.Empty<string>();
             }
@@ -122,7 +122,7 @@ namespace ParTool
             {
                 directories = new List<string>(directoryInfo.GetDirectories().Select(f => f.FullName));
             }
-            else if (directories.SingleOrDefault().Length == 0)
+            else if (directories.First().Length == 0)
             {
                 directories = Enumerable.Empty<string>();
             }
